@@ -1,0 +1,41 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.grpc.example;
+
+message Customer {
+  Id id = 1;
+  FirstName firstName = 2;
+  LastName lastName = 3;
+  string address = 4;
+  string email = 5;
+  string phone = 6;
+  int32 age = 7;
+}
+
+message Id {
+  string id = 1;
+}
+
+message FirstName {
+  string firstName = 1;
+}
+
+message LastName {
+  string lastName = 1;
+}
+
+message CustomersResponse {
+  repeated Customer customers = 1;
+}
+
+service CustomerService {
+  rpc getCustomerById(Id) returns (Customer) {}
+
+  rpc getCustomersByFirstName(FirstName) returns (stream Customer) {}
+
+  rpc getCustomersByIds(stream Id) returns (stream Customer) {}
+
+  rpc createCustomer(Customer) returns (Customer) {}
+
+  rpc getCustomersByLastName(stream LastName) returns (CustomersResponse) {}
+}
