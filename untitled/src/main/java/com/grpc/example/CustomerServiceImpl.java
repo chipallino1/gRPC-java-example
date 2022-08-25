@@ -33,7 +33,7 @@ public class CustomerServiceImpl extends CustomerServiceGrpc.CustomerServiceImpl
         Customer customer4 = Customer.newBuilder()
                 .setId(Id.newBuilder().setId("4"))
                 .setFirstName(FirstName.newBuilder().setFirstName("Vanya"))
-                .setLastName(LastName.newBuilder().setLastName("Skorupich"))
+                .setLastName(LastName.newBuilder().setLastName("Test"))
                 .setAddress("Home address")
                 .setPhone("2wewer4")
                 .setAge(17).build();
@@ -77,6 +77,11 @@ public class CustomerServiceImpl extends CustomerServiceGrpc.CustomerServiceImpl
         return new StreamObserver<Id>() {
             @Override
             public void onNext(Id id) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 for (Customer customer : CUSTOMERS) {
                     if (customer.getId().getId().equals(id.getId())) {
                         responseObserver.onNext(customer);
@@ -125,6 +130,7 @@ public class CustomerServiceImpl extends CustomerServiceGrpc.CustomerServiceImpl
             @Override
             public void onCompleted() {
                 responseObserver.onNext(customersResponseBuilder.build());
+                responseObserver.onCompleted();
             }
         };
     }
